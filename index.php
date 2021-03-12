@@ -7,8 +7,10 @@
         
     </head>
     <body>
-        <a style="text-decoration:none" href="/debit_serch"><button type="button" class="btn btn-danger btn-lg btn-block">Debit</button></a>
-        <a style="text-decoration:none" href="/Credit_serch"><button type="button" class="btn  btn-lg btn-block">Credit</button></a>
-        <a style="text-decoration:none" href="/View_record"><button type="button" class="btn btn-success btn-lg btn-block">View Record By Time</button></a>
+        <a style="text-decoration:none" href="debit_serch.php"><button type="button" class="btn btn-danger btn-lg btn-block">Debit</button></a>
+        <a style="text-decoration:none" href="Credit_serch.php"><button type="button" class="btn  btn-lg btn-block">Credit</button></a>
+        <a style="text-decoration:none" href="View_record.php"><button type="button" class="btn btn-success btn-lg btn-block">View Record By Time</button></a>
+        <label for="birthday">Birthday:</label>
+<input type="date" id="birthday" name="birthday">
     </body>
 </html>

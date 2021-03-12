@@ -37,7 +37,6 @@ function calc()
 			var qty = $(this).find('.qty').val();
 			var price = $(this).find('.price').val();
 			$(this).find('.total').val(qty*price);
-			
 			calc_total();
 		}
     });
