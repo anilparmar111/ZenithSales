@@ -12,18 +12,44 @@
 
 
 <?php
-  
-      if(!empty($_POST['product']))
-      {
-      foreach($_POST['product'] as $checked){
-        echo $checked."</br>";
-      }
+
+try 
+{
+	$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
+	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$sql = "SELECT count(*) FROM bill where compname= ?";
+	
+	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
+$result = $databasehandler->prepare($sql); 
+$result->execute([ $_GET['serch']]); 
+$number_of_rows = $result->fetchColumn(); 
+$index=$number_of_rows+1;
+
+
+    if(!empty($_POST['product']))
+    {
+        $ed=$_POST['bdate'];
+        for($i=0;$i<count($_POST['product']);$i++)
+        { 
+        	$prod=$_POST['product'][$i];
+          	$qt=$_POST['qty'][$i];
+          	$pr=$_POST['price'][$i];
+			$sql = "SELECT count(*) FROM bill where compname= ?"; 
+			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei) VALUES (?,?,?,?,?,?)";
+			$result = $databasehandler->prepare($sql); 
+			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed]);
+        }
     }
     else
     {
-      echo ("error");
+    	echo ("error");
     }
-  
+}
+catch (PDOException $e) {
+        echo $e->getMessage();
+        die();
+    }
+	header("Location:index.php");
 ?>
 
 

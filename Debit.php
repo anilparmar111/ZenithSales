@@ -29,7 +29,7 @@ var time = today.getDate() + ":" + today.getMonth() + ":" + today.getFullYear();
 document.getElementById("dat").innerHTML=time+ap
 t=setTimeout('startTime()', 500);
 document.getElementById('clock').innerHTML=h+":"+m+":"+s+" "+ap
-t=setTimeout('startTime()', 500)
+// t=setTimeout('startTime()', 500)
 }
 function checkTime(i){
 if (i<10)
@@ -57,11 +57,10 @@ window.onload=startTime;
 
 <!-- action="add_debit_data.php?serch=<//?php echo $_GET['serch'];?>" method="post" -->
 
-
+<form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" enctype="multipart/form-data"  method="post">
 <div class="container">
   <div class="row clearfix">
     <div class="col-md-12">
-    <form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>"  method="post">
       <table class="table table-bordered table-hover" id="tab_logic">
         <thead>
           <tr>
@@ -75,18 +74,17 @@ window.onload=startTime;
         <tbody>
           <tr id='addr0'>
             <td>1</td>
-            <td><input type="text" name='product[]'  placeholder='Enter Product Name' class="form-control"/></td>
-            <td><input type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
-            <td><input type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
-            <td><input type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
+            <td><input required type="text" name='product[]'  placeholder='Enter Product Name' class="form-control"/></td>
+            <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+            <td><input required type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
+            <td><input required type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
             <!-- <td><button id='delete_row' class="pull-right btn btn-default">Delete Row</button></td> -->
             <!-- <td><input type="button" value="Delete" onclick="deleteRow(this)"></td> -->
         </tr>
           <tr id='addr1'></tr>
         </tbody>
       </table>
-      <input type="submit">
-</form>
+
     </div>
   </div>
   <div class="row clearfix">
@@ -95,6 +93,14 @@ window.onload=startTime;
       <button type="button" value="button"  id='delete_row' class="pull-right btn btn-default">Delete Row</button>
     </div>
   </div>
+
+
+  <br><br>
+  
+  <input type="date" required name="bdate">
+
+  <br><br>
+        <input class="btn btn-danger" type="submit" >
   <div class="row clearfix" style="margin-top:20px">
     <div class="pull-right col-md-4">
       <table class="table table-bordered table-hover" id="tab_logic_total">
@@ -126,7 +132,7 @@ window.onload=startTime;
   </div>
 </div>
 
-
+</form>
 
 
 

@@ -74,7 +74,7 @@ session_start();
 $qryres=$databasehandler->query($sql);
 while ($row = $qryres->fetch()) 
 {
-  echo("<tr><td>".$row['name']."</td><td><a target='_blank' href='Debit.php?serch=".$row['name']." ' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Debit</a></td></tr>");
+  echo("<tr><td>".$row['comp_name']."</td><td><a target='_blank' href='Debit.php?serch=".$row['comp_name']." ' class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Debit</a></td></tr>");
 }
 }
 catch (PDOException $e) {
