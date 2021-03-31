@@ -25,10 +25,10 @@ if(h==0) h=12;
 //to add a zero in front of numbers<10
 m=checkTime(m)
 s=checkTime(s)
-var time = today.getDate() + ":" + today.getMonth() + ":" + today.getFullYear();
-document.getElementById("dat").innerHTML=time+ap
+var time = today.getDate() + "/" + today.getMonth() + "/" + today.getFullYear();
+document.getElementById("dat").innerHTML=time
 t=setTimeout('startTime()', 500);
-document.getElementById('clock').innerHTML=h+":"+m+":"+s+" "+ap
+document.getElementById('clock').innerHTML=h+":"+m;
 // t=setTimeout('startTime()', 500)
 }
 function checkTime(i){
