@@ -17,28 +17,30 @@ try
 {
 	$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "SELECT count(*) FROM bill where compname= ?";
+	$sql = "SELECT count(DISTINCT billid)   FROM bill where compname= ?";
 	
 	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
 $result = $databasehandler->prepare($sql); 
 $result->execute([ $_GET['serch']]); 
 $number_of_rows = $result->fetchColumn(); 
 $index=$number_of_rows+1;
-
-
     if(!empty($_POST['product']))
     {
         $ed=$_POST['bdate'];
+        $total=0;
         for($i=0;$i<count($_POST['product']);$i++)
         { 
-        	$prod=$_POST['product'][$i];
-          	$qt=$_POST['qty'][$i];
-          	$pr=$_POST['price'][$i];
-			$sql = "SELECT count(*) FROM bill where compname= ?"; 
-			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei) VALUES (?,?,?,?,?,?)";
+            $prod=$_POST['product'][$i];
+            $qt=$_POST['qty'][$i];
+            $pr=$_POST['price'][$i];
+            $total+=$qt*$pr;
+			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps) VALUES (?,?,?,?,?,?,?)";
 			$result = $databasehandler->prepare($sql); 
-			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed]);
+			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false]);
         }
+        $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate) VALUES (?,?,?,?,?)";
+			$result = $databasehandler->prepare($sql); 
+			$result->execute([$_GET['serch'],$index,false,$total,$ed]);
     }
     else
     {
