@@ -8,7 +8,9 @@
 <script src="media/bootstrap.min.js"></script>
 <!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
 <!-- <link rel="stylesheet" href="w3.css"> -->
-
+<script src='jquery-3.2.1.min.js' type='text/javascript'></script>
+<script src='select2/dist/js/select2.min.js' type='text/javascript'></script>
+<link href='select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
 <script src="script.js"></script>
 <script type="text/javascript">
 function startTime(){
@@ -45,7 +47,10 @@ window.onload=startTime;
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
+<a style="text-decoration:none" href="Addnitem.php"><button type="button" class="btn btn-danger btn-lg btn-block">Add New Product</button></a>
+<!--drop down for select item-->
+   
+<!-- end of drop down list-->
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
     <center><h1><?php echo $_GET['serch'];?></h1></center>      
@@ -74,7 +79,28 @@ window.onload=startTime;
         <tbody>
           <tr id='addr0'>
             <td>1</td>
-            <td><input required type="text" name='product[]'  placeholder='Enter Product Name' class="form-control"/></td>
+            <td>
+            <select id='ll' name='product[]'  style='width: 200px;' required>
+            <option value=''>-- Select Product --</option> 
+            
+            <?php
+                try 
+                {
+                    $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
+                    $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $sql = "select * from items";
+                    $var=$databasehandler->query($sql);
+                    foreach ($var as $key) {
+                      echo "<option value='".$key['item_name']."'>".$key['item_name']."</option>";
+                    }
+                }  
+                catch (PDOException $e) {
+                    echo $e->getMessage();
+                  die();
+                }
+                ?>
+          </select>
+          </td>
             <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
             <td><input required type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
             <td><input required type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
@@ -96,8 +122,7 @@ window.onload=startTime;
 
 
   <br><br>
-  
-  <input type="date" required name="bdate">
+
 
   <br><br>
         <input class="btn btn-danger" type="submit" >
@@ -110,22 +135,6 @@ window.onload=startTime;
             
             <td class="text-center"><input type="number" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
           </tr>
-          <!-- <tr>
-            <th class="text-center">Tax</th>
-            <td class="text-center"><div class="input-group mb-2 mb-sm-0">
-                <input type="number" class="form-control" id="tax" placeholder="0">
-                <div class="input-group-addon">%</div>
-              </div></td>
-          </tr>
-          <tr>
-            <th class="text-center">Tax Amount</th>
-            <td class="text-center"><input type="number" name='tax_amount' id="tax_amount" placeholder='0.00' class="form-control" readonly/></td>
-          </tr> 
-          <tr>
-            <th class="text-center">Grand Total</th>
-            <td class="text-center"><input type="number" name='total_amount' id="total_amount" placeholder='0.00' class="form-control" readonly/></td>
-        </tr>-->
-        
         </tbody>
       </table>
     </div>
@@ -143,6 +152,25 @@ function deleteRow(r) {
   document.getElementById("tab_logic").deleteRow(i);
 }
 </script>
+
+
+
+<script>
+        $(document).ready(function(){
+            
+            // Initialize select2
+            $("#selUser").select2();
+
+            // Read selected option
+            $('#but_read').click(function(){
+                var username = $('#selUser option:selected').text();
+                var userid = $('#selUser').val();
+           
+                $('#result').html("id : " + userid + ", name : " + username);
+            });
+        });
+        </script>
+
 
 </body>
 </html>
