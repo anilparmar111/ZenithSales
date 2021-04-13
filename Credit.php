@@ -18,18 +18,15 @@ var h=today.getHours()
 var m=today.getMinutes()
 var s=today.getSeconds()
 var ap="AM";
-//to add AM or PM after time
 if(h>11) ap="PM";
 if(h>12) h=h-12;
 if(h==0) h=12;
-//to add a zero in front of numbers<10
 m=checkTime(m)
 s=checkTime(s)
 var time = today.getDate() + ":" + today.getMonth() + ":" + today.getFullYear();
 document.getElementById("dat").innerHTML=time+ap
 t=setTimeout('startTime()', 500);
 document.getElementById('clock').innerHTML=h+":"+m+":"+s+" "+ap
-// t=setTimeout('startTime()', 500)
 }
 function checkTime(i){
 if (i<10)
@@ -55,100 +52,75 @@ window.onload=startTime;
         
 </div>
 
-<!-- action="add_debit_data.php?serch=<//?php echo $_GET['serch'];?>" method="post" -->
-
 
 
 <?php 
+error_reporting(0);
 try 
 {
 
 $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps) VALUES (?,?,?,?,?,?,?)";
-$sql="select * from bill WHERE compname=? and ps=0";			
-$result = $databasehandler->prepare($sql);
+$sql="select payment from payment_status WHERE compname=?";
+// $_GET['serch']
+$result = $databasehandler->prepare($sql); 
 $result->execute([$_GET['serch']]);
-$i=0;
-$c=-1;
-$tmp=0;
-$totol=0;
-// if($result!=null)
-// { 
-//   $c=$result[0]['billid'];
-// }
-foreach ($result as $row) 
+$tp=0;
+foreach($result as $row)
 {
-    if($c==$row['billid'])
-    { 
-        $i=$i+1;
-        echo"<tr>
-        <th scope='row'>".$i."</th>
-        <td>".$row['pname']."</td>
-        <td>".$row['qty']."</td>
-        <td>".$row['price']."</td>
-        <td>".$row['qty']*$row['price']."</td>
-      </tr>";
-      $totol+=$row['qty']*$row['price'];
-    }
-    else
-    {
-        
-        if($tmp>0)
-        {
-          echo"<td colspan='4'><button style='width:100%; height:100%;'><a style='text-decoration:none;' href=add_credit_data.php?serch=".$_GET['serch']."&id=".$c.">Credit</a></button></td><td>".$totol."</td>";
-            echo"</tbody></table></form>";
-        }
-        $totol=0;
-        $c=$row['billid'];
-        $i=1;
-        $tmp+=1;
-        echo"<form action='#'><table class='table table-bordered border-primary'>".
-            "<thead><tr><th scope='col' colspan='3'>".$c."</th><th scope='col' colspan='2'>".date("d-m-Y", strtotime($row['timei']))."</th></tr></thead>"
-              ."
-          <thead>
-          <tr>
-          <th scope='col'>#</th>
-          <th scope='col'>Product</th>
-          <th scope='col'>Qty</th>
-          <th scope='col'>Price</th>
-          <th scope='col'>Total</th>
-          </tr>
-          </thead>
-          <tbody>"."<tr>
-          <th scope='row'>".$i."</th>
-          <td>".$row['pname']."</td>
-          <td>".$row['qty']."</td>
-          <td>".$row['price']."</td>
-          <td>".$row['qty']*$row['price']."</td>
-          </tr>";
-          $totol+=$row['qty']*$row['price'];
+    $tp=$tp+$row['payment'];
 }
 
-// echo"</tbody>
-        // </table><input type='submit'></form>";
-// echo"</tbody></table></form>";
-// echo " <tr>
-//       <th scope='row'>3</th>
-//       <td colspan='2'>Larry the Bird</td>
-//       <td>@twitter</td>
-//     </tr>";
-    
-}
-if($tmp>0)
+echo "<h1 style='color:red;'>Total Payable Amount : ".$tp."</h1></br>";
+$sql="select amount from payment_rec WHERE comp_name=?";
+$result = $databasehandler->prepare($sql); 
+$result->execute([$_GET['serch']]);
+$tr=0;
+foreach($result as $row)
 {
-echo"<td colspan='4'><button style='width:100%; height:100%;'><a style='text-decoration:none;' href=add_credit_data.php?serch=".$_GET['serch']."&id=".$c.">Credit</a></button></td><td>".$totol."</td>";
-            echo"</tbody></table></form>";
+    $tr=$tr+$row['amount'];
 }
-          }
+echo "<h1 style='color:green;'>Total Recieved Amount : ".$tr;
+echo "</h1><br>";
+echo "<h1 style='color:blue;'>Total : ";
+echo $tr-$tp;
+echo "<br>";
+echo "<br>";
+
+}
 catch (PDOException $e) {
         echo $e->getMessage();
         die();
     }
+    ?>
+<form method='post' name='form' action='#'>
+        <input type='text' required placeholder='Enter Amout Recived' name='ramt'>
+        <input type='date' required placeholder='Date' name='rdate'>
+        <input type='submit' value='Click Hear To Credit'>
+</form>
+
+<?php
+
+try 
+{
+      if($_POST['ramt'])
+      {
+          $sql="INSERT INTO payment_rec (comp_name,rdate,amount) VALUES (?,?,?)";			
+          $result = $databasehandler->prepare($sql);
+          $result->execute([$_GET['serch'],$_POST['rdate'],$_POST['ramt']]);
+          header("Location: index.php"); 
+      }
+
+
+}
+catch (PDOException $e) 
+{
+    echo $e->getMessage();
+    die();
+}
 ?>
 
 
-</form>
 
 </body>
 </html>
