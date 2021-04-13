@@ -50,7 +50,6 @@ form.example::after {
 </head>
 <body>
 <a style="text-decoration:none" href="Adduser.php"><button type="button" class="btn btn-danger btn-lg btn-block">Add New User</button></a>
-<a style="text-decoration:none" href="Addnitem.php"><button type="button" class="btn btn-danger btn-lg btn-block">Add New Product</button></a>
 
 <div class="container">
 
