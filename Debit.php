@@ -47,7 +47,6 @@ window.onload=startTime;
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a style="text-decoration:none" href="Addnitem.php"><button type="button" class="btn btn-danger btn-lg btn-block">Add New Product</button></a>
 <!--drop down for select item-->
    
 <!-- end of drop down list-->
