@@ -1,3 +1,4 @@
+<?php include 'required.php';?>
 <html>
 <head>
 <link href="media/bootstrap.min.css" rel="stylesheet">
@@ -37,12 +38,7 @@ Enter Ending Date : <input type='date' name='edate' required><br>
 <input type='submit'>
 </form>
 </body>
-
 </html>
-
-
-
-
 <?php
 error_reporting(0);
 
@@ -65,9 +61,9 @@ if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
     {
         $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
         $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql="select * from payment_status  WHERE pdate>=? and  rdate<=? and compname=?";			
+        $sql="select * from payment_status  WHERE pdate>=? and  pdate<=? and compname=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname']]);
+        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -78,9 +74,9 @@ if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
             $dt->compdate=$row['pdate'];
             array_push($arr,$dt);
         }
-        $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=? and comp_name=?";			
+        $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=? and comp_name=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname']]);
+        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -104,9 +100,9 @@ elseif($_POST['sdate'] && $_POST['edate'])
     {
         $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
         $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql="select * from payment_status  WHERE pdate>=? and  rdate<=?";			
+        $sql="select * from payment_status  WHERE pdate>=? and  pdate<=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate']]);
+        $result->execute([$_POST['sdate'],$_POST['edate'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -117,9 +113,9 @@ elseif($_POST['sdate'] && $_POST['edate'])
             $dt->compdate=$row['pdate'];
             array_push($arr,$dt);
         }
-        $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=?";			
+        $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate']]);
+        $result->execute([$_POST['sdate'],$_POST['edate'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -156,18 +152,25 @@ echo "<table class='table'>
     </thead>
     <tbody>";
     $i=1;
+    $sum=0;
     foreach ($arr as $key=>$entry) {
-        
+        $amount=$entry->amount;
+        if($entry->ddate=='-')
+        {
+            $amount=$amount*(-1);
+        }
+        $sum+=$amount;
         echo "<tr>
                     <th scope='row'>".$i."</th>
                     <td>".$entry->billno."</td>
                     <td>".$entry->comp_name."</td>
                     <td>".$entry->ddate."</td>
                     <td>".$entry->cdate."</td>
-                    <td>".$entry->amount."</td></tr>";
+                    <td>".$amount."</td></tr>";
         $i+=1;
                     # code...
     }
-    // echo"</tbody></table>"
+    echo"</tbody></table>";
+    echo "<h1 color='green'>Total Amout Is : ".$sum."</h1>";
 ?>
 

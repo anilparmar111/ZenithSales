@@ -1,3 +1,4 @@
+<?php include 'required.php';?>
 <?php
 error_reporting(0);
     if(isset($_POST['SubmitButton'])){

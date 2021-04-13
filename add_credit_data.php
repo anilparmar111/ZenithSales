@@ -1,4 +1,4 @@
-
+<?php include 'required.php';?>
 
 <?php
 $comp=$_GET['serch'];

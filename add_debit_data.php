@@ -1,3 +1,4 @@
+<?php include 'required.php';?>
 <html>
 
 <head>
@@ -34,13 +35,20 @@ $index=$number_of_rows+1;
             $qt=$_POST['qty'][$i];
             $pr=$_POST['price'][$i];
             $total+=$qt*$pr;
-			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps) VALUES (?,?,?,?,?,?,?)";
-			$result = $databasehandler->prepare($sql); 
-			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false]);
+    session_start();
+   if( !isset( $_SESSION['party'] ) ) 
+   {
+       $msg="Please Select Party";
+       header("Location: login.php?msg={$msg}");  
+   }
+			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps,party) VALUES (?,?,?,?,?,?,?,?)";
+			
+      $result = $databasehandler->prepare($sql); 
+			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false,$_SESSION['party']]);
         }
-        $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate) VALUES (?,?,?,?,?)";
+        $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
 			$result = $databasehandler->prepare($sql); 
-			$result->execute([$_GET['serch'],$index,false,$total,$ed]);
+			$result->execute([$_GET['serch'],$index,false,$total,$ed,$_SESSION['party']]);
     }
     else
     {

@@ -1,3 +1,4 @@
+<?php include 'required.php';?>
 <html>
 
 <head>
@@ -56,15 +57,20 @@ window.onload=startTime;
 
 <?php 
 error_reporting(0);
+session_start();
 try 
 {
-
+if( !isset( $_SESSION['party'] ) ) 
+   {
+       $msg="Please Select Party";
+       header("Location: login.php?msg={$msg}");  
+   }
 $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$sql="select payment from payment_status WHERE compname=?";
+$sql="select payment from payment_status WHERE compname=? and party=?";
 // $_GET['serch']
 $result = $databasehandler->prepare($sql); 
-$result->execute([$_GET['serch']]);
+$result->execute([$_GET['serch'],$_SESSION['party']]);
 $tp=0;
 foreach($result as $row)
 {
@@ -72,9 +78,9 @@ foreach($result as $row)
 }
 
 echo "<h1 style='color:red;'>Total Payable Amount : ".$tp."</h1></br>";
-$sql="select amount from payment_rec WHERE comp_name=?";
+$sql="select amount from payment_rec WHERE comp_name=? and party=?";
 $result = $databasehandler->prepare($sql); 
-$result->execute([$_GET['serch']]);
+$result->execute([$_GET['serch'],$_SESSION['party']]);
 $tr=0;
 foreach($result as $row)
 {
@@ -103,11 +109,17 @@ catch (PDOException $e) {
 
 try 
 {
+    session_start();
+    if( !isset( $_SESSION['party'] ) ) 
+   {
+       $msg="Please Select Party";
+       header("Location: login.php?msg={$msg}");  
+   }
       if($_POST['ramt'])
       {
-          $sql="INSERT INTO payment_rec (comp_name,rdate,amount) VALUES (?,?,?)";			
+          $sql="INSERT INTO payment_rec (comp_name,rdate,amount,party) VALUES (?,?,?,?)";			
           $result = $databasehandler->prepare($sql);
-          $result->execute([$_GET['serch'],$_POST['rdate'],$_POST['ramt']]);
+          $result->execute([$_GET['serch'],$_POST['rdate'],$_POST['ramt'],$_SESSION['party']]);
           header("Location: index.php"); 
       }
 
