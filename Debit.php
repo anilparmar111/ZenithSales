@@ -125,6 +125,7 @@ window.onload=startTime;
 
 
   <br><br>
+  <input type="date" required name="bdate">
         <input class="btn btn-danger" type="submit" >
   <div class="row clearfix" style="margin-top:20px">
     <div class="pull-right col-md-4">

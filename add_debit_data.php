@@ -27,7 +27,7 @@ $number_of_rows = $result->fetchColumn();
 $index=$number_of_rows+1;
     if(!empty($_POST['product']))
     {
-        $ed=date('Y-m-d');
+        $ed=$_POST['bdate'];
         $total=0;
         for($i=0;$i<count($_POST['product']);$i++)
         { 
