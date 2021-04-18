@@ -161,15 +161,14 @@ echo "<table class='table'>
     <tbody>";
     $i=1;
     $sum=0;
+    $tp=0;
+    $tr=0;
     foreach ($arr as $key=>$entry) {
         $amount=$entry->amount;
-        if($entry->ddate=='-')
-        {
-            $amount=$amount*(-1);
-        }
-        $sum+=$amount;
+        
         if($entry->ddate!='-')
         {
+            $tp+=$amount;
             $ed = date("d/m/Y", strtotime($entry->ddate));
         }
         else
@@ -178,6 +177,7 @@ echo "<table class='table'>
         }
         if($entry->cdate!='-')
         {
+            $tr+=$amount;
             $ec = date("d/m/Y", strtotime($entry->cdate));
         }
         else
@@ -195,15 +195,23 @@ echo "<table class='table'>
         $i+=1;
                     # code...
     }
+    
+
     echo"</tbody></table>";
-    echo "<h1 color='green'>Total Amout Is : ".$sum."</h1>";
     if($_POST['cname']!='-1')
-    {
-        echo "<center><a href='datarender.php?sdate=".$_POST['sdate']."&edate=".$_POST['edate']."'target='_blank'><button>Get In Excel</button></a></center>";
-    }
-    else
     {
         echo "<center><a href='datarender.php?sdate=".$_POST['sdate']."&edate=".$_POST['edate']."&cname=".$_POST['cname']."'target='_blank'><button>Get In Excel</button></a></center>";
     }
+    else
+    {
+        echo "<center><a href='datarender.php?sdate=".$_POST['sdate']."&edate=".$_POST['edate']."'target='_blank'><button>Get In Excel</button></a></center>";
+    }
+
+echo "<h1 style='color:red;'>Total Payable Amount : ".$tp."</h1></br>";
+    echo "<h1 style='color:green;'>Total Recieved Amount : ".$tr;
+    echo "</h1><br>";
+    echo "<h1 style='color:blue;'>Total : ";
+    echo $tr-$tp;
+
 ?>
 

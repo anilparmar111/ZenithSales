@@ -22,7 +22,7 @@ class Lazer_data
 	$arr=array();
 
 
-if(isset($POST['cname']))
+if(isset($_GET['cname']))
 {
 	
     error_reporting(0);
@@ -120,19 +120,18 @@ $excel = new PHPExcel();
 $excel->setActiveSheetIndex(0);
 
 //populate the data
-$row = 4;
+$row = 5;
 
-
+ $tp=0;
+$tr=0;
 $i=1;
 foreach ($arr as $key=>$entry) 
 {
         $amount=$entry->amount;
-        if($entry->ddate=='-')
-        {
-            $amount=$amount*(-1);
-        }
+        
 		if($entry->ddate!='-')
         {
+            $tp+=$amount;
             $ed = date("d/m/Y", strtotime($entry->ddate));
         }
         else
@@ -141,6 +140,7 @@ foreach ($arr as $key=>$entry)
         }
         if($entry->cdate!='-')
         {
+            $tr+=$amount;
             $ec = date("d/m/Y", strtotime($entry->cdate));
         }
         else
@@ -158,6 +158,7 @@ foreach ($arr as $key=>$entry)
 	$row++;
 
 }
+$cnt=$row;
 
 //set column width
 $excel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
@@ -165,6 +166,80 @@ $excel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
 $excel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
 $excel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
 $excel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+
+$row+=1;
+$excel->getActiveSheet()->setCellValue('D'.$row, "Total Payable Amount");
+$excel->getActiveSheet()->setCellValue('E'.$row, $tp);
+$row+=1;
+$excel->getActiveSheet()->setCellValue('D'.$row, "Total Received Amount");
+$excel->getActiveSheet()->setCellValue('E'.$row, $tr);
+$row+=1;
+$excel->getActiveSheet()->setCellValue('D'.$row, "Total Amount");
+$excel->getActiveSheet()->setCellValue('E'.$row, $tp-$tr);
+$excel->getActiveSheet()->getStyle('D'.($cnt+1).':'.'E'.($cnt+1))->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+$excel->getActiveSheet()->getStyle('D'.($cnt+2).':'.'E'.($cnt+2))->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+$excel->getActiveSheet()->getStyle('D'.($cnt+3).':'.'E'.($cnt+3))->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+
+$excel->getActiveSheet()->getStyle('E2:E2')->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+
+$excel->getActiveSheet()->getStyle('E3:E3')->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+
+
 
 //make table headers
 $party="";
@@ -179,14 +254,17 @@ else
 
 $excel->getActiveSheet()
 	 ->setCellValue('A1' , $party) //this is a title
-	->setCellValue('A3' , 'Bill NO')
-	->setCellValue('B3' , 'Compnay Name')
-	->setCellValue('C3' , 'Debit Date')
-	->setCellValue('D3' , 'Credit Date')
-	->setCellValue('E3' , 'Amount');
+	->setCellValue('A4' , 'Bill NO')
+	->setCellValue('B4' , 'Compnay Name')
+	->setCellValue('C4' , 'Debit Date')
+	->setCellValue('D4' , 'Credit Date')
+	->setCellValue('E4' , 'Amount');
 
 //merging the title
 $excel->getActiveSheet()->mergeCells('A1:E1');
+
+$excel->getActiveSheet()->setCellValue('E2', "From : ".date("d/m/Y", strtotime($_GET['sdate'])));
+$excel->getActiveSheet()->setCellValue('E3', "To : ".date("d/m/Y", strtotime($_GET['edate'])));
 
 //aligning
 $excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
@@ -199,7 +277,7 @@ $excel->getActiveSheet()->getStyle('A1')->applyFromArray(
 		)
 	)
 );
-$excel->getActiveSheet()->getStyle('A3:E3')->applyFromArray(
+$excel->getActiveSheet()->getStyle('A4:E4')->applyFromArray(
 	array(
 		'font' => array(
 			'bold'=>true
@@ -212,7 +290,7 @@ $excel->getActiveSheet()->getStyle('A3:E3')->applyFromArray(
 	)
 );
 //give borders to data
-$excel->getActiveSheet()->getStyle('A4:E'.($row-1))->applyFromArray(
+$excel->getActiveSheet()->getStyle('A5:E'.($cnt-1))->applyFromArray(
 	array(
 		'borders' => array(
 			'outline' => array(
@@ -229,7 +307,18 @@ $excel->getActiveSheet()->getStyle('A4:E'.($row-1))->applyFromArray(
 //redirect to browser (download) instead of saving the result as a file
 //this is for MS Office Excel xls format
 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-header('Content-Disposition: attachment; filename="test.xlsx"');
+
+if(isset($_GET['cname']))
+{
+    
+    $name=$_SESSION['party']."_".$_GET['cname']."_".date("d/m/Y", strtotime($_GET['sdate']))."_".date("d/m/Y", strtotime($_GET['edate'])).".xlsx";
+    header('Content-Disposition: attachment; filename="'.$name.'"');
+}
+else
+{
+    $name=$_SESSION['party']."_".date("d/m/Y", strtotime($_GET['sdate']))."_".date("d/m/Y", strtotime($_GET['edate'])).".xlsx";
+    header('Content-Disposition: attachment; filename="'.$name.'"');
+}
 header('Cache-Control: max-age=0');
 
 //write the result to a file

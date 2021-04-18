@@ -14,7 +14,7 @@ catch (PDOException $e) {
         echo $e->getMessage();
         die();
     }
-header("Location: debit_serch.php");
+header("Location: Addnitem.php");
     }
 
         ?>
