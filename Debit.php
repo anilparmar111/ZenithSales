@@ -102,7 +102,7 @@ window.onload=startTime;
           </select>
           </td>
             <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
-            <td><input required type="number" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
+            <td><input required type="text" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
             <td><input required type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
             <!-- <td><button id='delete_row' class="pull-right btn btn-default">Delete Row</button></td> -->
             <!-- <td><input type="button" value="Delete" onclick="deleteRow(this)"></td> -->

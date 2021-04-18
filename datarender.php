@@ -1,49 +1,14 @@
 <?php include 'required.php';?>
-<html>
-<head>
-<link href="media/bootstrap.min.css" rel="stylesheet">
-<!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
-<script src="media/jquery-1.11.1.min.js"></script>
-<script src="media/bootstrap.min.js"></script>
-</head>
-<body>
-<form method="post" action="#">
-Enter Starting Date : <input type='date' name='sdate' required>
-<br>
-<br><br>
-Enter Ending Date : <input type='date' name='edate' required><br>
-<br>
-<br>
-<br>
-<!-- Enter Compnay Name : <input type="text" placeholder="Enter Compnay Name" name="cname"> -->
-<select id='ll' name='cname'  style='width: 200px;' required>
-            <option value='-1'>-- Select Compnay Name --</option> 
-            <?php
-                try 
-                {
-                    $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
-                    $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $sql = "select * from comp";
-                    $var=$databasehandler->query($sql);
-                    foreach ($var as $key) {
-                      echo "<option value='".$key['comp_name']."'>".$key['comp_name']."</option>";
-                    }
-                }  
-                catch (PDOException $e) {
-                    echo $e->getMessage();
-                  die();
-                }
-                ?>
-</select>
-<input type='submit'>
-
-
-</form>
-</body>
-</html>
 <?php
-error_reporting(0);
+
+
+
 require_once 'Classes/PHPExcel.php';
+
+// main for our excel sheet
+//database connection (using mysqli)
+$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
+$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 class Lazer_data
     {
@@ -54,11 +19,12 @@ class Lazer_data
         public $compdate;
         public $amount;
     }
-$arr=array();
-if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
+	$arr=array();
+
+
+if(isset($POST['cname']))
 {
-    $comp=$_GET['serch'];
-    $id=$_GET['id'];
+	
     error_reporting(0);
     try 
     {
@@ -66,7 +32,7 @@ if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
         $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql="select * from payment_status  WHERE pdate>=? and  pdate<=? and compname=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname'], $_SESSION['party']]);
+        $result->execute([$_GET['sdate'],$_GET['edate'],$_GET['cname'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -79,7 +45,7 @@ if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
         }
         $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=? and comp_name=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'],$_POST['cname'], $_SESSION['party']]);
+        $result->execute([$_GET['sdate'],$_GET['edate'],$_GET['cname'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -97,15 +63,15 @@ if($_POST['sdate'] && $_POST['edate'] && $_POST['cname']!='-1')
         die();
     }
 }
-elseif($_POST['sdate'] && $_POST['edate'])
+else
 {
-    try 
+	try 
     {
         $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
         $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $sql="select * from payment_status  WHERE pdate>=? and  pdate<=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'], $_SESSION['party']]);
+        $result->execute([$_GET['sdate'],$_GET['edate'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -118,7 +84,7 @@ elseif($_POST['sdate'] && $_POST['edate'])
         }
         $sql="select * from payment_rec  WHERE rdate>=? and  rdate<=? and party=?";			
         $result = $databasehandler->prepare($sql);
-        $result->execute([$_POST['sdate'],$_POST['edate'], $_SESSION['party']]);
+        $result->execute([$_GET['sdate'],$_GET['edate'], $_SESSION['party']]);
         foreach ($result as $row) 
         {
             $dt=new Lazer_data();
@@ -137,38 +103,35 @@ elseif($_POST['sdate'] && $_POST['edate'])
         die();
     }
 }
+
 function cmp($x, $y) {
     if(strtotime($x->compdate) == strtotime($y->compdate))
     {
         return $x->billno > $y->billno;
     }
     return strtotime($x->compdate) - strtotime($y->compdate);
-
 }
 usort($arr, "cmp");
+        
+//create PHPExcel object
+$excel = new PHPExcel();
 
-echo "<table class='table'>
-    <thead>
-    <tr>
-        <th scope='col'>#</th>
-        <th scope='col'>Biil No</th>
-        <th scope='col'>Compnay Name</th>
-        <th scope='col'>Debit Date</th>
-        <th scope='col'>Credit Date</th>
-        <th scope='col'>Amount</th>
-    </tr>
-    </thead>
-    <tbody>";
-    $i=1;
-    $sum=0;
-    foreach ($arr as $key=>$entry) {
+//selecting active sheet
+$excel->setActiveSheetIndex(0);
+
+//populate the data
+$row = 4;
+
+
+$i=1;
+foreach ($arr as $key=>$entry) 
+{
         $amount=$entry->amount;
         if($entry->ddate=='-')
         {
             $amount=$amount*(-1);
         }
-        $sum+=$amount;
-        if($entry->ddate!='-')
+		if($entry->ddate!='-')
         {
             $ed = date("d/m/Y", strtotime($entry->ddate));
         }
@@ -184,26 +147,95 @@ echo "<table class='table'>
         {
             $ec="-";
         }
-        // $ec = date("d/m/Y", strtotime($entry->cdate));  
-        echo "<tr>
-                    <th scope='row'>".$i."</th>
-                    <td>".$entry->billno."</td>
-                    <td>".$entry->comp_name."</td>
-                    <td>".$ed."</td>
-                    <td>".$ec."</td>
-                    <td>".$amount."</td></tr>";
-        $i+=1;
-                    # code...
-    }
-    echo"</tbody></table>";
-    echo "<h1 color='green'>Total Amout Is : ".$sum."</h1>";
-    if($_POST['cname']!='-1')
-    {
-        echo "<center><a href='datarender.php?sdate=".$_POST['sdate']."&edate=".$_POST['edate']."'target='_blank'><button>Get In Excel</button></a></center>";
-    }
-    else
-    {
-        echo "<center><a href='datarender.php?sdate=".$_POST['sdate']."&edate=".$_POST['edate']."&cname=".$_POST['cname']."'target='_blank'><button>Get In Excel</button></a></center>";
-    }
+		$excel->getActiveSheet()
+		->setCellValue('A'.$row , $entry->billno)
+		->setCellValue('B'.$row , $entry->comp_name)
+		->setCellValue('C'.$row , $ed)
+		->setCellValue('D'.$row , $ec)
+		->setCellValue('E'.$row , $amount);
+
+	//increment the row
+	$row++;
+
+}
+
+//set column width
+$excel->getActiveSheet()->getColumnDimension('A')->setWidth(10);
+$excel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+$excel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+$excel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+$excel->getActiveSheet()->getColumnDimension('E')->setWidth(30);
+
+//make table headers
+$party="";
+if($_SESSION["party"]=='zs')
+{
+	$party="Zenithsales";
+}
+else
+{
+	$party="Mansales";
+}
+
+$excel->getActiveSheet()
+	 ->setCellValue('A1' , $party) //this is a title
+	->setCellValue('A3' , 'Bill NO')
+	->setCellValue('B3' , 'Compnay Name')
+	->setCellValue('C3' , 'Debit Date')
+	->setCellValue('D3' , 'Credit Date')
+	->setCellValue('E3' , 'Amount');
+
+//merging the title
+$excel->getActiveSheet()->mergeCells('A1:E1');
+
+//aligning
+$excel->getActiveSheet()->getStyle('A1')->getAlignment()->setHorizontal('center');
+
+//styling
+$excel->getActiveSheet()->getStyle('A1')->applyFromArray(
+	array(
+		'font'=>array(
+			'size' => 24,
+		)
+	)
+);
+$excel->getActiveSheet()->getStyle('A3:E3')->applyFromArray(
+	array(
+		'font' => array(
+			'bold'=>true
+		),
+		'borders' => array(
+			'allborders' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+//give borders to data
+$excel->getActiveSheet()->getStyle('A4:E'.($row-1))->applyFromArray(
+	array(
+		'borders' => array(
+			'outline' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			),
+			'vertical' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+			)
+		)
+	)
+);
+
+
+//redirect to browser (download) instead of saving the result as a file
+//this is for MS Office Excel xls format
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment; filename="test.xlsx"');
+header('Cache-Control: max-age=0');
+
+//write the result to a file
+$file = PHPExcel_IOFactory::createWriter($excel,'Excel2007');
+//output to php output instead of filename
+$file->save('php://output');
+
 ?>
 
