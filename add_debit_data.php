@@ -7,10 +7,22 @@
 <!-- <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script> -->
 <script src="media/jquery-1.11.1.min.js"></script>
 <script src="media/bootstrap.min.js"></script>
+<!-- <script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<!-- <link rel="stylesheet" href="w3.css"> -->
+<script src='jquery-3.2.1.min.js' type='text/javascript'></script>
+<script src='select2/dist/js/select2.min.js' type='text/javascript'></script>
+<link href='select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
+<style media="print">
+ @page {
+  size: auto;
+  margin: 0;
+       }
+</style>
+
+
 </head>
+
 <body>
-
-
 
 <?php
 
@@ -19,7 +31,7 @@ try
 	$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$sql = "SELECT count(DISTINCT billid)   FROM bill where compname= ?";
-	
+
 	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
 $result = $databasehandler->prepare($sql); 
 $result->execute([ $_GET['serch']]); 
@@ -35,6 +47,7 @@ $index=$number_of_rows+1;
             $qt=$_POST['qty'][$i];
             $pr=$_POST['price'][$i];
             $total+=$qt*$pr;
+            
     session_start();
    if( !isset( $_SESSION['party'] ) ) 
    {
@@ -48,6 +61,11 @@ $index=$number_of_rows+1;
         }
         $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
 			$result = $databasehandler->prepare($sql); 
+      	$inc=$_POST['inc'];
+  $gst=$_POST['gst'];
+  $ext=$_POST['ext'];
+  $total+=($total*$inc)/100;
+  $total+=$gst+$ext;
 			$result->execute([$_GET['serch'],$index,false,$total,$ed,$_SESSION['party']]);
     }
     else
@@ -59,23 +77,131 @@ catch (PDOException $e) {
         echo $e->getMessage();
         die();
     }
-	header("Location:index.php");
+	// header("Location:index.php");
 ?>
-
 
 
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
-    <center><h1><?php echo $_GET['serch'];?></h1></center>      
-    <p><div id="clock"></div></p>
-    <p><div id="dat"></p>
-  </div>
-        
+   <center><h1>
+  <?php
+  
+  if($_SESSION['party']=='zs')
+  {
+    echo "Zenith Sales";
+  }
+  else {
+    echo "Mann Sales";
+  }?></h1></center>
+    <p>
+    <div>
+    <?php
+        $newDate = date("d/m/Y", strtotime($_POST['bdate']));  
+    echo $newDate;  ?> 
+    </div>
+    <div float="right">
+    <?php   
+  if($_SESSION['party']=='zs')
+  {
+    echo "Recieved By : ".$_GET['serch'];
+  }
+  else {
+    echo "Recieved By : ".$_GET['serch'];
+  }
+
+?>
 </div>
+    </p>
+  </div>   
+</div>
+<div class="container">
+  <div class="row clearfix">
+    <div class="col-md-12">
+      <table class="table table-bordered table-hover" id="tab_logic">
+        <thead>
+          <tr>
+            <th class="text-center"> # </th>
+            <th class="text-center"> Product </th>
+            <th class="text-center"> Qty </th>
+            <th class="text-center"> Price </th>
+            <th class="text-center"> Total </th>
+          </tr>
+        </thead>
+        <tbody>
+<?php 
+
+for($i=0;$i<count($_POST['product']);$i++)
+        { 
+
+            echo "<tr id='addr0'>
+            <td>1</td>
+          <td>".$_POST['product'][$i]."</td>
+            <td>".$_POST['qty'][$i]."</td>
+            <td>".$_POST['price'][$i]."</td>
+            <td>".$_POST['price'][$i]*$_POST['qty'][$i]."</td>
+        </tr>
+          <tr></tr>";
+
+        }
 
 
+?>
+          
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <br><br>
 
 
+  <br><br>
+  <div class="row clearfix" style="margin-top:20px">
+    <div class="pull-right col-md-4">
+      <table class="table table-bordered table-hover" id="tab_logic_total">
+        <tbody>
+        <tr>
+            <th class="text-center">Price Increse %  </th>
+            <td class="text-center"><?php echo $_POST['inc'] ?></td>
+          </tr>
+                  <tr>
+            <th class="text-center">GST  </th>
+            <td class="text-center"><?php echo $_POST['gst']?></td>
+          </tr>
+                            <tr>
+            <th class="text-center">Extra  </th>
+            <td class="text-center"><?php echo $_POST['ext']?></td>
+          </tr>
+          <tr>
+
+            <th class="text-center">Total</th>
+            
+            <td class="text-center">
+            <?php
+            $total=0;
+            for($i=0;$i<count($_POST['product']);$i++)
+            { 
+              $prod=$_POST['product'][$i];
+              $qt=$_POST['qty'][$i];
+              $pr=$_POST['price'][$i];
+              $total+=$qt*$pr;
+            }
+            $inc=$_POST['inc'];
+  $gst=$_POST['gst'];
+  $ext=$_POST['ext'];
+  $total+=($total*$inc)/100;
+  $total+=$gst+$ext;
+  echo $total;
+            
+            ?>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

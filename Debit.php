@@ -53,9 +53,33 @@ window.onload=startTime;
 <!-- end of drop down list-->
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
-    <center><h1><?php echo $_GET['serch'];?></h1></center>      
+  <center><h1>
+  <?php
+  
+  if($_SESSION['party']=='zs')
+  {
+    echo "Zenith Sales";
+  }
+  else {
+    echo "Mann Sales";
+  }
+  ?></h1></center>      
+
+
     <p><div id="clock"></div></p>
-    <p><div id="dat"></p>
+    <p><div id="dat"></div></p>
+    <div float="right">
+    <?php   
+  if($_SESSION['party']=='zs')
+  {
+    echo "Recieved By : ".$_GET['serch'];
+  }
+  else {
+    echo "Recieved By : ".$_GET['serch'];
+  }
+
+?>
+</div>
   </div>
         
 </div>
@@ -80,9 +104,8 @@ window.onload=startTime;
           <tr id='addr0'>
             <td>1</td>
             <td>
-            <select id='ll' name='product[]'  style='width: 200px;' required>
+            <select id='ll' name='product[]' class="product"  style='width: 200px;' required>
             <option value=''>-- Select Product --</option> 
-            
             <?php
                 try 
                 {
@@ -93,6 +116,7 @@ window.onload=startTime;
                     foreach ($var as $key) {
                       echo "<option value='".$key['item_name']."'>".$key['item_name']."</option>";
                     }
+                    
                 }  
                 catch (PDOException $e) {
                     echo $e->getMessage();
@@ -126,15 +150,28 @@ window.onload=startTime;
 
   <br><br>
   <input type="date" required name="bdate">
-        <input class="btn btn-danger" type="submit" >
+        <input class="btn btn-danger"  type="submit" >
   <div class="row clearfix" style="margin-top:20px">
     <div class="pull-right col-md-4">
       <table class="table table-bordered table-hover" id="tab_logic_total">
         <tbody>
+        <tr>
+            <th class="text-center">Price Increse %  </th>
+            <td class="text-center"><input type="text" name='inc' required placeholder='0.00' class="form-control" id="inc"/></td>
+          </tr>
+                  <tr>
+            <th class="text-center">GST  </th>
+            <td class="text-center"><input type="text" name='gst' required placeholder='0' class="form-control" id="gst"/></td>
+          </tr>
+                            <tr>
+            <th class="text-center">Extra  </th>
+            <td class="text-center"><input type="text" name='ext' required placeholder='0' class="form-control" id="ext"/></td>
+          </tr>
           <tr>
+
             <th class="text-center">Total</th>
             
-            <td class="text-center"><input type="number" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
+            <td class="text-center"><input type="text" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
           </tr>
         </tbody>
       </table>
@@ -153,8 +190,6 @@ function deleteRow(r) {
   document.getElementById("tab_logic").deleteRow(i);
 }
 </script>
-
-
 
 <script>
         $(document).ready(function(){

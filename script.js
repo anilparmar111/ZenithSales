@@ -22,6 +22,15 @@ $(document).ready(function(){
 	$('#add_row').on('keyup change',function(){
 		calc_total();
 	});
+	$('#inc').on('keyup change',function(){
+		calc_total();
+	});
+	$('#gst').on('keyup change',function(){
+		calc_total();
+	});
+	$('#ext').on('keyup change',function(){
+		calc_total();
+	});
 	$('#delete_row').on('keyup change',function(){
 		calc_total();
 	});
@@ -36,6 +45,7 @@ function calc()
 		{
 			var qty = $(this).find('.qty').val();
 			var price = $(this).find('.price').val();
+			
 			$(this).find('.total').val(qty*price);
 			calc_total();
 		}

@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="au.css" >
 </head>
 
-
 <body>
 
 <section id="cover" class="min-vh-100">
@@ -20,8 +19,12 @@
                     <div class="px-2">
                         <form action="additem.php" method="post" class="justify-content-center">
                             <div class="form-group">
-                                <label class="sr-only">Name</label>
+                                <label class="sr-only" style="color:black; font-size: 40px;" >Name</label>
                                 <input  name="myInput" type="text" required class="form-control" placeholder="Enter Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" style="color:black; font-size: 40px;" >Price</label>
+                                <input  name="price" type="text" required class="form-control" placeholder="Enter Price">
                             </div>
                             <button type="submit" name="SubmitButton" class="btn btn-primary btn-lg">Register</button>
                         </form>
