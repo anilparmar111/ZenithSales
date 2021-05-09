@@ -157,15 +157,15 @@ window.onload=startTime;
         <tbody>
         <tr>
             <th class="text-center">Price Increse %  </th>
-            <td class="text-center"><input type="text" name='inc' required placeholder='0.00' class="form-control" id="inc"/></td>
+            <td class="text-center"><input type="text" id="inc" name='inc' required placeholder='0.00' class="form-control" /></td>
           </tr>
                   <tr>
             <th class="text-center">GST  </th>
-            <td class="text-center"><input type="text" name='gst' required placeholder='0' class="form-control" id="gst"/></td>
+            <td class="text-center"><input type="text" id="gst" name='gst' required placeholder='0' class="form-control" /></td>
           </tr>
                             <tr>
             <th class="text-center">Extra  </th>
-            <td class="text-center"><input type="text" name='ext' required placeholder='0' class="form-control" id="ext"/></td>
+            <td class="text-center"><input type="text" id="ext" name='ext' required placeholder='0' class="form-control" /></td>
           </tr>
           <tr>
 

@@ -132,9 +132,10 @@ catch (PDOException $e) {
 
 for($i=0;$i<count($_POST['product']);$i++)
         { 
+			$index=$i+1;
 
             echo "<tr id='addr0'>
-            <td>1</td>
+            <td>".$index."</td>
           <td>".$_POST['product'][$i]."</td>
             <td>".$_POST['qty'][$i]."</td>
             <td>".$_POST['price'][$i]."</td>
