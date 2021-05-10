@@ -37,36 +37,29 @@ $result = $databasehandler->prepare($sql);
 $result->execute([ $_GET['serch']]); 
 $number_of_rows = $result->fetchColumn(); 
 $index=$number_of_rows+1;
+$ed=$_POST['bdate'];
     if(!empty($_POST['product']))
     {
         $ed=$_POST['bdate'];
-        $total=0;
         for($i=0;$i<count($_POST['product']);$i++)
         { 
             $prod=$_POST['product'][$i];
             $qt=$_POST['qty'][$i];
             $pr=$_POST['price'][$i];
-            $total+=$qt*$pr;
-            
-    session_start();
-   if( !isset( $_SESSION['party'] ) ) 
-   {
-       $msg="Please Select Party";
-       header("Location: login.php?msg={$msg}");  
-   }
-			$sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps,party) VALUES (?,?,?,?,?,?,?,?)";
-			
-      $result = $databasehandler->prepare($sql); 
-			$result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false,$_SESSION['party']]);
+            session_start();
+            if( !isset( $_SESSION['party'] ) ) 
+            {
+                 $msg="Please Select Party";
+                  header("Location: login.php?msg={$msg}");  
+            }
+			      $sql = "INSERT INTO bill (billid,compname,pname,qty,price,timei,ps,party) VALUES (?,?,?,?,?,?,?,?)";
+            $result = $databasehandler->prepare($sql); 
+			      $result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false,$_SESSION['party']]);
         }
-        $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
-			$result = $databasehandler->prepare($sql); 
-      	$inc=$_POST['inc'];
-  $gst=$_POST['gst'];
-  $ext=$_POST['ext'];
-  $total+=($total*$inc)/100;
-  $total+=$gst+$ext;
-			$result->execute([$_GET['serch'],$index,false,$total,$ed,$_SESSION['party']]);
+      $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
+			$result = $databasehandler->prepare($sql);	
+      
+			$result->execute([$_GET['serch'],$index,false,$_POST['sub_total'],$ed,$_SESSION['party']]);
     }
     else
     {
@@ -170,9 +163,19 @@ for($i=0;$i<count($_POST['product']);$i++)
             <th class="text-center">GST  </th>
             <td class="text-center"><?php echo $_POST['gst']?></td>
           </tr>
-                            <tr>
-            <th class="text-center">Extra  </th>
-            <td class="text-center"><?php echo $_POST['ext']?></td>
+                          <tr>
+            <th class="text-center">BOX <br> PRICE</th>
+            <td class="text-center">
+            <?php echo $_POST['box'] ?>
+            <br>
+            <?php echo $_POST['no'] ?>
+            <br>
+            <?php echo $_POST['box']*$_POST['no'] ?>
+            <!-- <input type="text" id="box" name='box' readonly placeholder=""  class="form-control" /> -->
+            <!-- <input type="text" id="no" name='no' readonly placeholder="" class="form-control" /> -->
+            <!-- <input type="text" id="ext" name='ext' readonly placeholder="" class="form-control" /> -->
+            
+            </td>
           </tr>
           <tr>
 
@@ -180,21 +183,7 @@ for($i=0;$i<count($_POST['product']);$i++)
             
             <td class="text-center">
             <?php
-            $total=0;
-            for($i=0;$i<count($_POST['product']);$i++)
-            { 
-              $prod=$_POST['product'][$i];
-              $qt=$_POST['qty'][$i];
-              $pr=$_POST['price'][$i];
-              $total+=$qt*$pr;
-            }
-            $inc=$_POST['inc'];
-  $gst=$_POST['gst'];
-  $ext=$_POST['ext'];
-  $total+=($total*$inc)/100;
-  $total+=$gst+$ext;
-  echo $total;
-            
+            echo $_POST["sub_total"];
             ?>
             </td>
           </tr>

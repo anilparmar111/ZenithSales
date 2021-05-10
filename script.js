@@ -31,6 +31,12 @@ $(document).ready(function(){
 	$('#ext').on('keyup change',function(){
 		calc_total();
 	});
+	$('#box').on('keyup change',function(){
+		calc_total();
+	});
+	$('#no').on('keyup change',function(){
+		calc_total();
+	});
 	$('#delete_row').on('keyup change',function(){
 		calc_total();
 	});
@@ -58,8 +64,40 @@ function calc_total()
 	$('.total').each(function() {
         total += parseInt($(this).val());
     });
+	  
+  var inc=parseFloat($("#inc").val());
+  if(isNaN(inc))
+  {
+	  inc=0;
+  }
+//   alert(inc+100);
+total=total+(total*inc)/100;
+var gst=parseFloat($("#gst").val());
+  if(isNaN(gst))
+  {
+	  gst=0;
+  }
+  var box=parseFloat($("#box").val());
+  if(isNaN(box))
+  {
+	  box=0;
+  }
+  var no=parseFloat($("#no").val());
+  if(isNaN(no))
+  {
+	  no=0;
+  }
+  var ext=box*no;
+  $('#ext').val(ext.toFixed(2));
+  total=total+gst+ext;
 	$('#sub_total').val(total.toFixed(2));
 	// tax_sum=total/100*$('#tax').val();
 	// $('#tax_amount').val(tax_sum.toFixed(2));
 	// $('#total_amount').val((tax_sum+total).toFixed(2));
 }
+
+// $(document).ready(function() {
+//   $("#inc").keyup(function() {
+//     alert($(this).val());
+//   });
+// });

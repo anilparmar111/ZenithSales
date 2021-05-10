@@ -164,8 +164,13 @@ window.onload=startTime;
             <td class="text-center"><input type="text" id="gst" name='gst' required placeholder='0' class="form-control" /></td>
           </tr>
                             <tr>
-            <th class="text-center">Extra  </th>
-            <td class="text-center"><input type="text" id="ext" name='ext' required placeholder='0' class="form-control" /></td>
+            <th class="text-center">BOX <br><br> PRICE</th>
+            <td class="text-center">
+            <input type="text" id="box" name='box' required placeholder='0' class="form-control" />
+            <input type="text" id="no" name='no' required placeholder='0' class="form-control" />
+            <input type="text" id="ext" name='ext' readonly placeholder='0' class="form-control" />
+            
+            </td>
           </tr>
           <tr>
 
