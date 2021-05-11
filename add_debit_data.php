@@ -30,11 +30,11 @@ try
 {
 	$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "SELECT count(DISTINCT billid)   FROM bill where compname= ?";
+	$sql = "SELECT count(DISTINCT billid)   FROM bill where compname= ? and party=?";
 
 	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
 $result = $databasehandler->prepare($sql); 
-$result->execute([ $_GET['serch']]); 
+$result->execute([ $_GET['serch'],$_SESSION['party'] ]); 
 $number_of_rows = $result->fetchColumn(); 
 $index=$number_of_rows+1;
 $ed=$_POST['bdate'];
@@ -76,35 +76,56 @@ catch (PDOException $e) {
 
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
-   <center><h1>
-  <?php
-  
-  if($_SESSION['party']=='zs')
-  {
-    echo "Zenith Sales";
-  }
-  else {
-    echo "Mann Sales";
-  }?></h1></center>
-    <p>
-    <div>
-    <?php
+   <center>
+   <h1>
+  <?php echo $_GET['serch'];?>
+  </h1></center>
+    
+    <div> 
+    <h5> Date : <?php
         $newDate = date("d/m/Y", strtotime($_POST['bdate']));  
     echo $newDate;  ?> 
-    </div>
-    <div float="right">
-    <?php   
-  if($_SESSION['party']=='zs')
-  {
-    echo "Recieved By : ".$_GET['serch'];
-  }
-  else {
-    echo "Recieved By : ".$_GET['serch'];
-  }
+    </div></h5>
+    <h5> Bill No:  <?php
+       $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
+	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	$sql = "SELECT count(DISTINCT billid)   FROM payment_status where compname= ? and party=?";
 
-?>
-</div>
-    </p>
+	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
+$result = $databasehandler->prepare($sql); 
+$result->execute([ $_GET['serch'],$_SESSION['party']]); 
+$number_of_rows = $result->fetchColumn(); echo $number_of_rows ?> 
+    </div></h5>
+    
+    
+    <table class="width: 50%;float: left;">
+  <tbody>
+    <tr>
+        <td><label for="lrn">L.R. No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="text" required class="form-control;width: 23%;float: left;" name="lrn" id="lrn" placeholder="Enter L R No">
+        </td>
+    </tr>
+    <tr>
+<td><label for="ttb">Total Box&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="number" required class="form-control;width: 23%;float: left;" name="ttb" id="ttb" placeholder="Enter Total Box">
+        </td>
+    </tr>
+    <tr>
+<td><label for="ttc">Total Cartoon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="number" required class="form-control;width: 23%;float: left;" name="ttc" id="ttc" placeholder="Enter Total Cartoon">
+        </td>
+    </tr>
+    <tr>
+<td><label for="tcp">Transport&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <textarea rows='3' cols='23' required  name="tcp" id="tcp" placeholder="Enter Transport"></textarea>
+        </td>
+    </tr>
+  </tbody>
+</table>
   </div>   
 </div>
 <div class="container">
@@ -156,6 +177,10 @@ for($i=0;$i<count($_POST['product']);$i++)
       <table class="table table-bordered table-hover" id="tab_logic_total">
         <tbody>
         <tr>
+            <th class="text-center">Total</th>
+            <td class="text-center"><?php echo $_POST['ttl'] ?></td>
+            </tr>
+        <tr>
             <th class="text-center">Price Increse %  </th>
             <td class="text-center"><?php echo $_POST['inc'] ?></td>
           </tr>
@@ -163,7 +188,7 @@ for($i=0;$i<count($_POST['product']);$i++)
             <th class="text-center">GST  </th>
             <td class="text-center"><?php echo $_POST['gst']?></td>
           </tr>
-                          <tr>
+          <tr>
             <th class="text-center">BOX <br> PRICE</th>
             <td class="text-center">
             <?php echo $_POST['box'] ?>
@@ -179,7 +204,7 @@ for($i=0;$i<count($_POST['product']);$i++)
           </tr>
           <tr>
 
-            <th class="text-center">Total</th>
+            <th class="text-center">Grand Total</th>
             
             <td class="text-center">
             <?php

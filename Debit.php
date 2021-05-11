@@ -53,47 +53,62 @@ window.onload=startTime;
 <!-- end of drop down list-->
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
-  <center><h1>
-  <?php
+  <center>
+   <h1>
+  <?php echo $_GET['serch'];?>
+  </h1></center>
+
   
-  if($_SESSION['party']=='zs')
-  {
-    echo "Zenith Sales";
-  }
-  else {
-    echo "Mann Sales";
-  }
-  ?></h1></center>      
 
-
-    <p><div id="clock"></div></p>
-    <p><div id="dat"></div></p>
-    <div float="right">
-    <?php   
-  if($_SESSION['party']=='zs')
-  {
-    echo "Recieved By : ".$_GET['serch'];
-  }
-  else {
-    echo "Recieved By : ".$_GET['serch'];
-  }
-
-?>
-</div>
-  </div>
         
-</div>
 
 <!-- action="add_debit_data.php?serch=<//?php echo $_GET['serch'];?>" method="post" -->
 
 <form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" enctype="multipart/form-data"  method="post">
+
+<table class="width: 50%;float: left;">
+  <tbody>
+    <tr>
+        <td><label for="lrn">L.R. No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="text" required class="form-control;width: 23%;float: left;" name="lrn" id="lrn" placeholder="Enter L R No">
+        </td>
+    </tr>
+    <tr>
+<td><label for="ttb">Total Box&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="number" required class="form-control;width: 23%;float: left;" name="ttb" id="ttb" placeholder="Enter Total Box">
+        </td>
+    </tr>
+    <tr>
+<td><label for="ttc">Total Cartoon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <input type="number" required class="form-control;width: 23%;float: left;" name="ttc" id="ttc" placeholder="Enter Total Cartoon">
+        </td>
+    </tr>
+    <tr>
+<td><label for="tcp">Transport&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
+        <td>
+          <textarea rows='3' cols='23' required  name="tcp" id="tcp" placeholder="Enter Transport"></textarea>
+        </td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+</div>
+  </div>
+        
+
+
 <div class="container">
   <div class="row clearfix">
     <div class="col-md-12">
       <table class="table table-bordered table-hover" id="tab_logic">
         <thead>
           <tr>
-            <th class="text-center"> # </th>
+            <th class="text-center"> No </th>
             <th class="text-center"> Product </th>
             <th class="text-center"> Qty </th>
             <th class="text-center"> Price </th>
@@ -151,10 +166,14 @@ window.onload=startTime;
   <br><br>
   <input type="date" required name="bdate">
         <input class="btn btn-danger"  type="submit" >
-  <div class="row clearfix" style="margin-top:20px">
+  <div class="row clearfix" style="margin-top:20px;font-size:10px;">
     <div class="pull-right col-md-4">
       <table class="table table-bordered table-hover" id="tab_logic_total">
         <tbody>
+        <tr>
+            <th class="text-center">Total</th>
+            <td class="text-center"><input type="text" id="ttl" name='ttl' readonly placeholder='0.00' class="form-control" /></td>
+        </tr>
         <tr>
             <th class="text-center">Price Increse %  </th>
             <td class="text-center"><input type="text" id="inc" name='inc' required placeholder='0.00' class="form-control" /></td>
@@ -162,6 +181,10 @@ window.onload=startTime;
                   <tr>
             <th class="text-center">GST  </th>
             <td class="text-center"><input type="text" id="gst" name='gst' required placeholder='0' class="form-control" /></td>
+          </tr>
+           <tr>
+            <th class="text-center">Courier Charge  </th>
+            <td class="text-center"><input type="text" id="cg" name='cg' required placeholder='0' class="form-control" /></td>
           </tr>
                             <tr>
             <th class="text-center">BOX <br><br> PRICE</th>
@@ -174,7 +197,7 @@ window.onload=startTime;
           </tr>
           <tr>
 
-            <th class="text-center">Total</th>
+            <th class="text-center">Grand Total</th>
             
             <td class="text-center"><input type="text" name='sub_total' placeholder='0.00' class="form-control" id="sub_total" readonly/></td>
           </tr>
