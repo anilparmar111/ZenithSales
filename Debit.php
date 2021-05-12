@@ -73,13 +73,13 @@ window.onload=startTime;
     <tr>
 <td><label for="ttb">Total Box&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
         <td>
-          <input type="number" required  name="ttb" id="ttb" placeholder="Enter Total Box">
+          <input type="text" required  name="ttb" id="ttb" placeholder="Enter Total Box">
         </td>
     </tr>
     <tr>
 <td><label for="ttc">Total Cartoon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
         <td>
-          <input type="number" required  name="ttc" id="ttc" placeholder="Enter Total Cartoon">
+          <input type="text" required  name="ttc" id="ttc" placeholder="Enter Total Cartoon">
         </td>
     </tr>
     <tr>
