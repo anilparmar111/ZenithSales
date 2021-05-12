@@ -170,7 +170,7 @@ catch (PDOException $e) {
                 <table class="table table-bordered table-hover" id="tab_logic">
                     <thead>
                         <tr>
-                            <th class="text-center"> # </th>
+                            <th class="text-center"> No </th>
                             <th class="text-center"> Product </th>
                             <th class="text-center"> Qty </th>
                             <th class="text-center"> Price </th>
