@@ -55,35 +55,31 @@ window.onload=startTime;
   <div class="jumbotron" class="container w3-display-container w3-text-white">
   <center>
    <h1>
-  <?php echo $_GET['serch'];?>
+  <?php echo $_GET['serch']; ?>
   </h1></center>
 
   
 
-        
-
-<!-- action="add_debit_data.php?serch=<//?php echo $_GET['serch'];?>" method="post" -->
-
-<form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" enctype="multipart/form-data"  method="post">
+<div class="ss-item-required">
 
 <table class="width: 50%;float: left;">
   <tbody>
     <tr>
         <td><label for="lrn">L.R. No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
         <td>
-          <input type="text" required class="form-control;width: 23%;float: left;" name="lrn" id="lrn" placeholder="Enter L R No">
+          <input type="text" required  name="lrn" id="lrn" placeholder="Enter L R No">
         </td>
     </tr>
     <tr>
 <td><label for="ttb">Total Box&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
         <td>
-          <input type="number" required class="form-control;width: 23%;float: left;" name="ttb" id="ttb" placeholder="Enter Total Box">
+          <input type="number" required  name="ttb" id="ttb" placeholder="Enter Total Box">
         </td>
     </tr>
     <tr>
 <td><label for="ttc">Total Cartoon&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
         <td>
-          <input type="number" required class="form-control;width: 23%;float: left;" name="ttc" id="ttc" placeholder="Enter Total Cartoon">
+          <input type="number" required  name="ttc" id="ttc" placeholder="Enter Total Cartoon">
         </td>
     </tr>
     <tr>
@@ -94,13 +90,14 @@ window.onload=startTime;
     </tr>
   </tbody>
 </table>
-
+</div>
 
 
 </div>
   </div>
         
 
+<form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" enctype="multipart/form-data"  method="post">
 
 <div class="container">
   <div class="row clearfix">
@@ -120,7 +117,7 @@ window.onload=startTime;
             <td>1</td>
             <td>
             <select id='ll' name='product[]' class="product"  style='width: 200px;' required>
-            <option value=''>-- Select Product --</option> 
+            <option value=''>Select Product</option> 
             <?php
                 try 
                 {
@@ -143,8 +140,6 @@ window.onload=startTime;
             <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
             <td><input required type="text" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
             <td><input required type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
-            <!-- <td><button id='delete_row' class="pull-right btn btn-default">Delete Row</button></td> -->
-            <!-- <td><input type="button" value="Delete" onclick="deleteRow(this)"></td> -->
         </tr>
           <tr id='addr1'></tr>
         </tbody>
@@ -165,7 +160,7 @@ window.onload=startTime;
 
   <br><br>
   <input type="date" required name="bdate">
-        <input class="btn btn-danger"  type="submit" >
+        <input class="btn btn-danger" onclick=" formcheck(); "   type="submit" >
   <div class="row clearfix" style="margin-top:20px;font-size:10px;">
     <div class="pull-right col-md-4">
       <table class="table table-bordered table-hover" id="tab_logic_total">
@@ -213,6 +208,48 @@ window.onload=startTime;
 
 <!-- <a  href="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" class='btn btn-primary btn-lg active' role='button' aria-pressed='true'>Debit</a> -->
 <script>
+
+function formcheck() {
+  var fields = $(".ss-item-required")
+        .find("select, textarea, input").serializeArray();
+
+
+
+// Set a Cookie
+function setCookie(cName, cValue, expDays) {
+        let date = new Date();
+        date.setTime(date.getTime() + (expDays * 24 * 60 * 60 * 1000));
+        const expires = "expires=" + date.toUTCString();
+        document.cookie = cName + "=" + cValue + "; " + expires + "; path=/";
+}
+
+// Apply setCookie
+// setCookie('username', username, 30);
+
+    
+
+  $.each(fields, function(i, field) {
+    if (!field.value)
+    {
+      alert(field.name + ' is required');
+      event.preventDefault();
+
+      // Validation.validate(document.getElementById(field.name));
+      
+
+    }
+    else
+    {
+      setCookie(field.name,field.value,7);
+      // sessionStorage.setItem(field.name, field.value);
+      // alert(field.name + sessionStorage.getItem(field.name));
+    }
+   });
+}
+
+
+
+
 function deleteRow(r) {
   var i = r.parentNode.parentNode.rowIndex;
   document.getElementById("tab_logic").deleteRow(i);
