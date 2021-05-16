@@ -13,6 +13,10 @@
 <script src='select2/dist/js/select2.min.js' type='text/javascript'></script>
 <link href='select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
 <script src="script.js"></script>
+<link rel="stylesheet" href="ds.css" />
+
+
+
 <script type="text/javascript">
 function startTime(){
 
@@ -116,26 +120,72 @@ window.onload=startTime;
           <tr id='addr0'>
             <td>1</td>
             <td>
-            <select id='ll' name='product[]' class="product"  style='width: 200px;' required>
-            <option value=''>Select Product</option> 
-            <?php
-                try 
-                {
-                    $databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
-                    $databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                    $sql = "select * from items";
-                    $var=$databasehandler->query($sql);
-                    foreach ($var as $key) {
-                      echo "<option value='".$key['item_name']."'>".$key['item_name']." price : ".$key['price']."</option>";
-                    }
-                    
-                }  
-                catch (PDOException $e) {
-                    echo $e->getMessage();
-                  die();
-                }
-                ?>
-          </select>
+            
+
+      <div class="select-box">
+        <div class="options-container">
+          <div class="option">
+            <input
+              type="radio"
+              class="radio"
+              id="automobiles"
+              name="category"
+            />
+            <label for="automobiles">Automobiles</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="film" name="category" />
+            <label for="film">Film & Animation</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="science" name="category" />
+            <label for="science">Science & Technology</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="art" name="category" />
+            <label for="art">Art</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="music" name="category" />
+            <label for="music">Music</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="travel" name="category" />
+            <label for="travel">Travel & Events</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="sports" name="category" />
+            <label for="sports">Sports</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="news" name="category" />
+            <label for="news">News & Politics</label>
+          </div>
+
+          <div class="option">
+            <input type="radio" class="radio" id="tutorials" name="category" />
+            <label for="tutorials">Tutorials</label>
+          </div>
+        </div>
+
+        <div class="selected">
+          Select Product
+           <script src="ds.js"></script>
+        </div>
+
+        <div class="search-box">
+          <input type="text" placeholder="Start Typing..." />
+        </div>
+
+    </div>
+
           </td>
             <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
             <td><input required type="text" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
