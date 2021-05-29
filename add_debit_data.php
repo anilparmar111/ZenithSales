@@ -167,14 +167,14 @@ catch (PDOException $e) {
     <div class="container">
         <div class="row clearfix">
             <div class="col-md-12">
-                <table class="table table-bordered table-hover" id="tab_logic">
+                <table class='table borderless' class="table table-bordered table-hover" id="tab_logic">
                     <thead>
                         <tr>
-                            <th class="text-center"> No </th>
-                            <th class="text-center"> Product </th>
-                            <th class="text-center"> Qty </th>
-                            <th class="text-center"> Price </th>
-                            <th class="text-center"> Total </th>
+                            <th class="text-left"> No </th>
+                            <th class="text-left"> Product </th>
+                            <th class="text-left"> Qty </th>
+                            <th class="text-left"> Price </th>
+                            <th class="text-left"> Total </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -198,6 +198,69 @@ for($i=0;$i<count($_POST['product']);$i++)
 
 ?>
 
+        <tr>
+        <td colspan='5'><br><?php echo " " ?></td>
+        
+        </tr>
+        <tr class="align-right">
+        <!-- <td ></td> -->
+        <th style="vertical-align:bottom; text-align:left;" colspan='3' rowspan="6">आत्मनिर्भर भारत = Vocal For Local</th>
+        <!-- <th style="text-align:right;" colspan='4' class="align-right" >Total</th> -->
+        <th>Total</th>
+        <td><?php echo $_POST['ttl'] ?></td>
+        </tr>
+        <tr>
+        <!-- <td colspan='3'></td> -->
+        
+        <th>Price <?php 
+            if($_POST['inc']>=0)
+            {
+                echo " + (plus) = ";
+                echo $_POST['inc'];
+                echo "%";
+            }
+            else {
+                echo " - (minus) = ";
+                echo $_POST['inc']*-1;
+                echo "%";
+                
+            }
+
+        ?> </th>
+        <td><?php 
+            $ans=0;
+            $ans=($_POST['ttl']*$_POST['inc'])/100;
+            echo $ans;
+        
+        ?></td>
+        </tr>
+
+            <tr>
+        <!-- <td colspan='3'></td> -->
+        <th>GST</th>
+        <td><?php echo $_POST['gst'] ?></td>
+        </tr>
+        <tr>
+
+        <!-- <td colspan='3'></td> -->
+        <th>Courier Charge</th>
+        <td><?php echo $_POST['cg'] ?></td>
+        </tr>
+
+        <tr>
+        <!-- <td colspan='3'></td> -->
+        <th>BOX = <?php echo $_POST['box']; echo " "; ?><br> Price Of Each = <?php echo $_POST['no'] ?> </th>
+        <td><?php echo $_POST['box']*$_POST['no'] ?></td>
+        </tr>
+
+        <tr>
+        <!-- <td  colspan='3'>आत्मनिर्भर भारत = Vocal For Local</td> -->
+        <th>Grand Total</th>
+        <th><?php echo $_POST['sub_total'] ?></th>
+        </tr>
+
+
+
                     </tbody>
                 </table>
 
@@ -208,40 +271,10 @@ for($i=0;$i<count($_POST['product']);$i++)
 
 
         <br><br>
-        <div class="row clearfix" style="margin-top:20px">
+        <!-- <div class="row clearfix" style="margin-top:20px">
             <div class="pull-right col-md-4">
                 <table class="table table-bordered table-hover" id="tab_logic_total">
                     <tbody>
-                        <tr>
-                            <th class="text-center">Total</th>
-                            <td class="text-center"><?php echo $_POST['ttl'] ?></td>
-                        </tr>
-                        <tr>
-                            <th class="text-center">Price Increse % </th>
-                            <td class="text-center"><?php echo $_POST['inc'] ?></td>
-                        </tr>
-                        <tr>
-                            <th class="text-center">GST </th>
-                            <td class="text-center"><?php echo $_POST['gst']?></td>
-                        </tr>
-                        <tr>
-                            <th class="text-center">Courier Charge</th>
-                            <td class="text-center"><?php echo $_POST['cg']?></td>
-                        </tr>
-                        <tr>
-                            <th class="text-center">BOX <br> PRICE</th>
-                            <td class="text-center">
-                                <?php echo $_POST['box'] ?>
-                                <br>
-                                <?php echo $_POST['no'] ?>
-                                <br>
-                                <?php echo $_POST['box']*$_POST['no'] ?>
-                                <!-- <input type="text" id="box" name='box' readonly placeholder=""  class="form-control" /> -->
-                                <!-- <input type="text" id="no" name='no' readonly placeholder="" class="form-control" /> -->
-                                <!-- <input type="text" id="ext" name='ext' readonly placeholder="" class="form-control" /> -->
-
-                            </td>
-                        </tr>
                         <tr>
 
                             <th class="text-center">Grand Total</th>
@@ -255,7 +288,7 @@ for($i=0;$i<count($_POST['product']);$i++)
                     </tbody>
                 </table>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </body>
