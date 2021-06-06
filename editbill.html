@@ -1,0 +1,54 @@
+<!-- <html>
+
+<head>
+    <script type="text/javascript">
+        
+            function getValue() {
+                var retVal = prompt("Enter Bill No : ", "");
+                
+                if(retVal==null || retVal=="" || retVal==" ")
+                {
+                    getValue();
+                }
+                else
+                {
+                    document.getElementById("lbl").innerHTML ="Your Bill No Is : ";
+                    document.getElementById("bln").innerHTML =retVal;
+                    // document.getElementById("lbl").setAttribute('value',retVal);
+                    console.log(document.getElementById("lbl").value);
+                    console.log(document.getElementById("bln").value);
+                }
+            }
+         
+    </script>
+</head>
+
+<body onload="getValue();">
+    <label id='lbl' >wdf</p>
+    <label id='bln' >wf</p>
+    <form>
+        <input value="Click Hear To Edit The Bill"   type="submit" />
+    </form>
+</body>
+
+</html> -->
+
+
+<html>
+    <head>
+        <title>Edit Bill</title>
+    </head>
+    <body>
+        <form method="POST">
+            <input type="text" placeholder="Enter Your Bill No">
+            <button type="submit">Submit</button>
+        </form>
+        <table>
+            <tr>
+                <td>
+                    <input type="button" onclick="dcb">
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
