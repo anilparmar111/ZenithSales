@@ -14,35 +14,6 @@
 <link href='select2/dist/css/select2.min.css' rel='stylesheet' type='text/css'>
 <script src="script.js"></script>
 <script type="text/javascript">
-function startTime(){
-
-var today=new Date()
-var h=today.getHours()
-var m=today.getMinutes()
-var s=today.getSeconds()
-var ap="AM";
-//to add AM or PM after time
-if(h>11) ap="PM";
-if(h>12) h=h-12;
-if(h==0) h=12;
-//to add a zero in front of numbers<10
-m=checkTime(m)
-s=checkTime(s)
-var time = today.getDate() + "/" + today.getMonth() + "/" + today.getFullYear();
-document.getElementById("dat").innerHTML=time
-t=setTimeout('startTime()', 500);
-document.getElementById('clock').innerHTML=h+":"+m;
-// t=setTimeout('startTime()', 500)
-}
-function checkTime(i){
-if (i<10)
-{ i="0" + i}
-return i
-}
-
-
-
-window.onload=startTime;
 </script>
 
 <link rel="stylesheet" href="style.css">

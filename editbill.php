@@ -134,7 +134,6 @@ echo "
                     $sql = 'select * from items';
                     $va=$databasehandler->query($sql);
                     foreach ($va as $ke) {
-                        print_r ($ke);
                       echo "'<option value='".$ke['item_name']."'>".$ke['item_name']." price : ".$ke['price']."</option>";
                     }
                       

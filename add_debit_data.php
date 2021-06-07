@@ -70,8 +70,14 @@ try
 	// $sql = "SELECT count(*) FROM `table` WHERE foo = ?"; 
 $result = $databasehandler->prepare($sql); 
 $result->execute([ $_GET['serch'],$_SESSION['party'] ]); 
+// bill_details
+
 $number_of_rows = $result->fetchColumn(); 
 $index=$number_of_rows+1;
+$sql = "INSERT INTO bill_details (billid,lrno,ttb,tc,tsp,pi,gst,cc,box_no,price) VALUES (?,?,?,?,?,?,?,?,?,?)";
+$result = $databasehandler->prepare($sql); 
+$result->execute([$index,$_COOKIE['lrn'], $_COOKIE['ttb'], $_COOKIE['ttc'],$_COOKIE['tcp'],$_POST['inc'],
+$_POST['gst'],$_POST['cg'],$_POST['box'],$_POST['no']]);
 $ed=$_POST['bdate'];
     if(!empty($_POST['product']))
     {
@@ -94,7 +100,6 @@ $ed=$_POST['bdate'];
         }
       $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
 			$result = $databasehandler->prepare($sql);	
-      
 			$result->execute([$_GET['serch'],$index,false,$_POST['sub_total'],$ed,$_SESSION['party']]);
     }
     else

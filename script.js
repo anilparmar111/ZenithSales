@@ -1,8 +1,15 @@
 $(document).ready(function(){
     var i=1;
-    $("#add_row").click(function(){b=i-1;
+    $("#add_row").click(function(){
+		b=i-1;
       	$('#addr'+i).html($('#addr'+b).html()).find('td:first-child').html(i+1);
       	$('#tab_logic').append('<tr id="addr'+(i+1)+'"></tr>');
+			$(".product").select2(
+				{
+					placeholder :'please selct product'
+				}
+			);
+			$(".product").last().next().next().remove();
       	i++; 
   	});
     $("#delete_row").click(function(){
@@ -45,6 +52,7 @@ $(document).ready(function(){
 	});
 
 });
+
 
 function calc()
 {
