@@ -67,7 +67,8 @@ try
 	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$sql = "delete FROM bill where billid=?";
  
-$result = $databasehandler->prepare($sql); 
+$result = $databasehandler->prepare($sql);
+// echo $_GET['blid']; 
 $result->execute([ $_GET['blid'] ]); 
 // $number_of_rows = $result->fetchColumn(); 
 $index=$_GET['blid'];
@@ -90,9 +91,19 @@ $ed=$_POST['bdate'];
             $result = $databasehandler->prepare($sql); 
 			      $result->execute([$index,$_GET['serch'],$prod,$qt,$pr,$ed,false,$_SESSION['party']]);
         }
-      $sql = "INSERT INTO payment_status (compname,billid,pay,payment,pdate,party) VALUES (?,?,?,?,?,?)";
+//         $sql = "delete FROM payment_status where billid=?";
+// $result = $databasehandler->prepare($sql);
+// $result->execute([ $_GET['blid'] ]);
+// echo "okdone<br>"; 
+      $sql = "update  payment_status set compname= ?,pay = ?,payment = ?,
+      pdate = ?,party = ? where billid=?";
 			$result = $databasehandler->prepare($sql);	
-			$result->execute([$_GET['serch'],$index,false,$_POST['sub_total'],$ed,$_SESSION['party']]);
+			$result->execute([$_GET['serch'],false,$_POST['sub_total'],$ed,$_SESSION['party'],$index]);
+            $sql = "update bill_details set lrno=?,ttb=?,tc=?,tsp=?,pi=?,gst=?,cc=?,box_no=?
+            ,price=?,compname=? where billid=? ";
+$result = $databasehandler->prepare($sql); 
+$result->execute([$_COOKIE['lrn'], $_COOKIE['ttb'], $_COOKIE['ttc'],$_COOKIE['tcp'],$_POST['inc'],
+$_POST['gst'],$_POST['cg'],$_POST['box'],$_POST['no'],$_GET['serch'],$index]);
     }
     else
     {

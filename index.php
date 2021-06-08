@@ -12,7 +12,7 @@
         <a style="text-decoration:none" href="Credit_serch.php"><button type="button" class="btn  btn-lg btn-block">Credit</button></a>
         <a style="text-decoration:none" href="View_record.php"><button type="button" class="btn btn-success btn-lg btn-block">View Record By Time</button></a>
         <a style="text-decoration:none" href="Addnitem.php"><button type="button" class="btn btn-danger btn-lg btn-block">Add New Product</button></a>
-        <a style="text-decoration:none" href="editbill.php"><button type="button" class="btn btn-lg btn-lg btn-block">Edit Bill</button></a>
+        <a style="text-decoration:none" href="edit.php"><button type="button" class="btn btn-lg btn-lg btn-block">Edit Bill</button></a>
         
     </body>
 </html>

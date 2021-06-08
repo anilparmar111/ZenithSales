@@ -17,38 +17,10 @@
 </script>
 
 <link rel="stylesheet" href="style.css">
-<script type="text/javascript">
-        $(document).ready(function(){
-            $("#sel_depart").change(function(){
-                var deptid = $(this).val();
-                $.ajax({
-                    url: 'productdata.php',
-                    type: 'post',
-                    dataType: 'json',
-                    success:function(response){
-                        var len = response.length;
-                        $("#sel_user").empty();
-                        for( var i = 0; i<len; i++){
-                            var id = response[i]['id'];
-                            var name = response[i]['name'];
-                            $("#sel_user").append("<option value='"+id+"'>"+name+"</option>");
-                        }
-                    }
-                });
-            });
-        });
-    </script>
-
-
-
-
 
 
 </head>
 <body>
-<!--drop down for select item-->
-   
-<!-- end of drop down list-->
 <div class="container">
   <div class="jumbotron" class="container w3-display-container w3-text-white">
   <center>
@@ -96,7 +68,6 @@
         
 
 <form action="add_debit_data.php?serch=<?php echo $_GET['serch'];?>" enctype="multipart/form-data"  method="post">
-
 <div class="container">
   <div class="row clearfix">
     <div class="col-md-12">
@@ -136,15 +107,15 @@
 
           </select>
           </td>
-            <td><input required type="number" name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
-            <td><input required type="text" name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
-            <td><input required type="number" name='total[]'  placeholder='0.00' class="form-control total" readonly/></td>
+            <td><input required type='number' name='qty[]'  placeholder='Enter Qty' class="form-control qty" step="0" min="0"/></td>
+            <td><input required type='text' name='price[]' placeholder='Enter Unit Price' class="form-control price" step="0.00" min="0"/></td>
+            <td><input required type='number' name='total[]'  placeholder='0.00' class='form-control total' readonly/></td>
         </tr>
           <tr id='addr1'></tr>
           
         </tbody>
       </table>
-
+                
     </div>
   </div>
   <div class="row clearfix">
@@ -237,7 +208,7 @@ function getval(sel)
                     type: 'post',
                     dataType: 'json',
                     success:function(response){
-                      // console.log(response);
+                      console.log(response);
                         var len = response.length;
                         // $("#ll").empty();
                         for( var i = 0; i<len; i++){
