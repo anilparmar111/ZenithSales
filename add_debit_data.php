@@ -74,7 +74,7 @@ $result->execute([ $_GET['serch'],$_SESSION['party'] ]);
 
 $number_of_rows = $result->fetchColumn(); 
 $index=$number_of_rows+1;
-$sql = "INSERT INTO bill_details (billid,lrno,ttb,tc,tsp,pi,gst,cc,box_no,price,compname) VALUES (?,?,?,?,?,?,?,?,?,?)";
+$sql = "INSERT INTO bill_details (billid,lrno,ttb,tc,tsp,pi,gst,cc,box_no,price,compname) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 $result = $databasehandler->prepare($sql); 
 $result->execute([$index,$_COOKIE['lrn'], $_COOKIE['ttb'], $_COOKIE['ttc'],$_COOKIE['tcp'],$_POST['inc'],
 $_POST['gst'],$_POST['cg'],$_POST['box'],$_POST['no'],$_GET['serch']]);
