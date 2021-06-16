@@ -22,6 +22,7 @@
 
 <body>
 
+<a style='text-decoration:none' href='debit_serch.php'><button type='button' class='btn btn-danger btn-lg btn-block'>Debit</button></a>
 <section id="cover" class="min-vh-100">
     <div id="cover-caption">
         <div class="container">
