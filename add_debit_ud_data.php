@@ -65,11 +65,11 @@ try
 {
 	$databasehandler = new PDO('mysql:host=127.0.0.1;dbname=zenithsales','zenithsales');
 	$databasehandler->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	$sql = "delete FROM bill where billid=?";
+	$sql = "delete FROM bill where billid=? and compname=?";
  
 $result = $databasehandler->prepare($sql);
 // echo $_GET['blid']; 
-$result->execute([ $_GET['blid'] ]); 
+$result->execute([ $_GET['blid'] ,$_GET['serch']]); 
 // $number_of_rows = $result->fetchColumn(); 
 $index=$_GET['blid'];
 $ed=$_POST['bdate'];
@@ -104,6 +104,12 @@ $ed=$_POST['bdate'];
 $result = $databasehandler->prepare($sql); 
 $result->execute([$_COOKIE['lrn'], $_COOKIE['ttb'], $_COOKIE['ttc'],$_COOKIE['tcp'],$_POST['inc'],
 $_POST['gst'],$_POST['cg'],$_POST['box'],$_POST['no'],$_GET['serch'],$index]);
+
+$sql = "update  bill_details set lrno= ?,tc = ?,tsp = ?,pi= ?,gst = ?,cc=?,box_no=?,price=?,ttb=? where billid=? and compname=?";
+$result = $databasehandler->prepare($sql); 
+$result->execute([$_COOKIE['lrn'],$_COOKIE['ttc'],$_COOKIE['tcp'],$_POST['inc'],$_POST['gst'],$_POST['cg'],
+$_POST['box'],$_POST['no'],$_COOKIE['ttb'],$index,$_GET['serch']]);
+
     }
     else
     {

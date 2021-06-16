@@ -193,7 +193,7 @@ echo "
             <tr>
                 <td><label for='tcp'>Transport&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label></td>
                 <td>
-                    <textarea rows='3'  cols='23' required name='tcp' id='tcp' placeholder='Enter Transport'>".$key['lrno']."</textarea>
+                    <textarea rows='3'  cols='23' required name='tcp' id='tcp' placeholder='Enter Transport'>".$key['tsp']."</textarea>
                 </td>
             </tr>
         </tbody>
